@@ -12,7 +12,11 @@ import router from "./router";
 import store from "./store";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import VSelect from "./components/appic-select";
+import VList from "./components/appic-virtual-list";
 Vue.use(ElementUI);
+Vue.component(VSelect.name, VSelect);
+Vue.component(VList.name, VList);
 Vue.config.productionTip = false;
 
 new Vue({
