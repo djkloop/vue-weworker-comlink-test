@@ -1,38 +1,14 @@
-/*
- * @Author       : djkloop
- * @Date         : 2021-07-07 22:13:10
- * @LastEditors   : djkloop
- * @LastEditTime  : 2021-07-08 17:33:26
- * @Description  : 头部注释
- * @FilePath      : /vue-weworker-comlink-test/src/workers/select-options.worker.js
+/* 
+ * @Author       : Eug
+ * @Date         : 2021-07-08 20:14:24
+ * @LastEditTime : 2021-07-08 20:46:41
+ * @LastEditors  : Eug
+ * @Descripttion : Descripttion
+ * @FilePath     : /vue-weworker-comlink-test/src/workers/select-options.worker.js
  */
+
 import * as Comlink from "comlink";
 import { each } from "lodash-es";
-
-Array.prototype.duffForEach = function (fn) {
-  const len = this.length;
-  var num = Math.floor(len / 8);
-  var leftover = len % 8;
-  var i = 0;
-  if (leftover > 0) {
-    do {
-      fn(this[i], i++);
-    } while (--leftover > 0);
-  }
-  if (this.length < 8) {
-    return;
-  }
-  do {
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-    fn(this[i], i++);
-  } while (--num > 0);
-};
 
 const o = {
   /// 应用
@@ -57,20 +33,18 @@ const o = {
     each(v.vals, (val) => {
       ov[val] = true;
     });
-
     ///
     const _o = [];
     for (let index = v.options.length - 1; index >= 0; index--) {
       const element = v.options[index];
-      if (ov[element.id]) {
+      if (ov[element.partner_id]) {
         _o.unshift(element);
       }
     }
-
     ///
     const _oo = [];
     each(_o, (val) => {
-      _oo.push(val.id);
+      _oo.push(val.appid);
     });
 
     return {
@@ -86,10 +60,8 @@ const o = {
   /// 广告组
   useCalculateSelectOptionsAd(v) {
     const _o = [];
-    const vals = [...new Set(v.vals)]
-    const vals1 = [...new Set(v.vals1)]
     v.options.forEach((item) => {
-      if (vals.includes(item.id) && vals1.includes(item.parter_id)) {
+      if (v.vals.includes(item.appid) && v.vals1.includes(item.partner_id)) {
         _o.push(item);
       }
     });

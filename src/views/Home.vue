@@ -1,10 +1,10 @@
 <!--
  * @Author       : djkloop
  * @Date         : 2021-07-07 22:03:22
- * @LastEditors   : djkloop
- * @LastEditTime  : 2021-07-08 14:56:09
+ * @LastEditors  : Eug
+ * @LastEditTime : 2021-07-08 20:48:44
  * @Description  : 头部注释
- * @FilePath      : /vue-weworker-comlink-test/src/views/Home.vue
+ * @FilePath     : /vue-weworker-comlink-test/src/views/Home.vue
 -->
 <template>
   <div class="home">
@@ -16,8 +16,8 @@
       v-model="value"
       :selectOptions="options"
       multiple
-      selectLabel="label"
-      selectVal="value"
+      selectLabel="name"
+      selectVal="id"
       @change="useChange"
     />
     <p>
@@ -28,8 +28,8 @@
         :selectOptions="options1"
         multiple
         :placeholder="linkDisabled ? '正在加载数据请稍等~~' : '请选择'"
-        selectLabel="label"
-        selectVal="value"
+        selectLabel="name"
+        selectVal="appid"
       />
     </p>
     <p>
@@ -37,11 +37,11 @@
         filterable
         v-model="value1"
         :disabled="linkDisabled"
-        :selectOptions="options1"
+        :selectOptions="options2"
         multiple
         :placeholder="linkDisabled ? '正在加载数据请稍等~~' : '请选择'"
-        selectLabel="label"
-        selectVal="value"
+        selectLabel="name"
+        selectVal="id"
       />
     </p>
     <div>
@@ -53,12 +53,7 @@
         <el-checkbox v-model="checked">备选项</el-checkbox>
       </p>
       <p>
-        <el-switch
-          v-model="switchv"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        >
-        </el-switch>
+        <el-switch v-model="switchv" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
       </p>
       <p>
         <el-input-number v-model="num" label="描述文字"></el-input-number>
@@ -70,94 +65,12 @@
 <script>
 import * as Comlink from "comlink";
 import SelectWorker from "../workers/select-options.worker.js";
-
 import dayjs from "dayjs";
 export default {
   name: "Home",
   data() {
     return {
-      options: [
-        {
-          value: 0,
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-        {
-          value: 1111,
-          label: "黄金糕",
-        },
-        {
-          value: "选1项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选2项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选3项4",
-          label: "龙须面",
-        },
-        {
-          value: "选4项5",
-          label: "北京烤鸭",
-        },
-        {
-          value: 205,
-          label: "黄金糕",
-        },
-        {
-          value: "选6项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选7项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项84",
-          label: "龙须面",
-        },
-        {
-          value: "选项45",
-          label: "北京烤鸭",
-        },
-        {
-          value: 303,
-          label: "黄金糕",
-        },
-        {
-          value: "选项232",
-          label: "双皮奶",
-        },
-        {
-          value: "选34项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选432项4",
-          label: "龙须面",
-        },
-        {
-          value: "选4432项5",
-          label: "北京烤鸭",
-        },
-      ],
+      options: [],
       value: [],
       value1: [],
       options1: [],
@@ -179,21 +92,12 @@ export default {
   },
   mounted() {
     this.initWorker();
-    for (let index = 0; index < this.work_count_3; index++) {
-      this.options1.push({
-        label: "index" + index,
-        value: "value" + index,
-        id: index < 20000 ? 0 : index,
-      });
-    }
-    for (let index = 0; index < this.work_count_4; index++) {
-      this.options2.push({
-        label: "index" + index,
-        value: "value" + index,
-        id: index < 20000 ? 0 : index,
-        parter_id: 0,
-      });
-    }
+    setTimeout(() => {
+      console.log(window.test);
+        this.options = window.test.partner
+      this.options1 = window.test.app
+      this.options2 = window.test.ad_slot
+    },2000)
   },
   methods: {
     async initWorker() {
@@ -215,6 +119,8 @@ export default {
         vals: this.value,
         timeStart: new Date().getTime(),
       });
+      console.log(res, 'res>>>>>');
+      
       // const res2 = await this.remoteWorker.useCalculateSelectOptions({
       //   type: "appic-test",
       //   options: res.data.options,
@@ -224,12 +130,15 @@ export default {
         type: "appic-test",
         options: this.options2,
         vals: res.data.options1,
-        vals1: this.value1,
+        vals1: this.value,
         timeStart: new Date().getTime(),
       });
       this.options1 = res.data.options;
       this.ids = res.data.options1;
       this.options2 = res3.data.options;
+      console.log(this.options1,'opt1');
+      console.log(this.options2,'opt2');
+      console.log(this.ids,'ids');
       // const res2 = await this.remoteWorker.useCalculateSelectOptions({
       //   type: "appic-test",
       //   workNumber: this.work_count_1 / 4,
